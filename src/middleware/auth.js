@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const Mentor = require("../models/mentor");
 
-const auth = async (req, res, next) => {
+const authMentor = async (req, res, next) => {
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({
+    const mentor = await Mentor.findOne({
       _id: decoded._id,
       "tokens.token": token,
     });
@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
       throw new Error();
     } else {
       req.token = token;
-      req.user = user;
+      req.mentor = mentor;
       next();
     }
   } catch (error) {
@@ -21,4 +21,24 @@ const auth = async (req, res, next) => {
   }
 };
 
-module.exports = auth;
+const authMentee = async (req, res, next) => {
+  try {
+    const token = req.header("Authorization").replace("Bearer ", "");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const mentee = await Mentee.findOne({
+      _id: decoded._id,
+      "tokens.token": token,
+    });
+    if (!user) {
+      throw new Error();
+    } else {
+      req.token = token;
+      req.mentee = mentee;
+      next();
+    }
+  } catch (error) {
+    res.status(401).send({ error: "Please authenticate." });
+  }
+};
+
+module.exports = { authMentor, authMentee };
