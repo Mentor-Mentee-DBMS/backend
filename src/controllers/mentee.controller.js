@@ -10,7 +10,7 @@ const createMenteeController = asyncHandler(async (req, res) => {
 
     res.status(201).send({ mentee, token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
 });
 
@@ -24,7 +24,7 @@ const loginMenteeController = asyncHandler(async (req, res) => {
 
     res.send({ mentee, token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
 });
 
@@ -37,7 +37,7 @@ const logoutMenteeController = asyncHandler(async (req, res) => {
 
     res.send({ message: "Logout successful", mentee: req.mentee });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
@@ -48,7 +48,7 @@ const logoutAllMenteesController = asyncHandler(async (req, res) => {
 
     res.send({ message: "Logout successful", mentee: req.mentee });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
@@ -57,7 +57,19 @@ const getMenteeProfileController = asyncHandler(async (req, res) => {
 });
 
 const updateMenteeController = asyncHandler(async (req, res) => {
-  const allowedUpdates = ["name", "email", "age", "password"];
+  const allowedUpdates = [
+    "name",
+    "email",
+    "phone",
+    "address",
+    "bio",
+    "dob",
+    "education_qualification",
+    "institute",
+    "domains",
+    "linkedin",
+    "password",
+  ];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
@@ -73,7 +85,7 @@ const updateMenteeController = asyncHandler(async (req, res) => {
       await req.mentee.save();
       res.send(req.mentee);
     } catch (error) {
-      res.status(400).send(error);
+      res.status(400).send({ error: error.message });
     }
   }
 });
@@ -84,7 +96,7 @@ const deleteMenteeController = asyncHandler(async (req, res) => {
 
     res.send(req.mentee);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
   }
 });
 

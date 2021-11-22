@@ -4,6 +4,17 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Mentee = require("../models/mentee");
 
+const getAge = (dob) => {
+  var today = new Date();
+  var birthDate = new Date(dob);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+};
+
 const mentorSchema = new mongoose.Schema(
   {
     name: {
@@ -47,16 +58,14 @@ const mentorSchema = new mongoose.Schema(
       },
     },
 
-    age: {
-      type: Number,
-      default: 0,
+    dob: {
+      type: Date,
+      required: true,
       validate(value) {
-        if (value < 0) {
-          throw new Error("Age must be a positive number!");
-        } else if (value > 100) {
-          throw new Error("Age must be less than 100!");
-        } else if (value % 1 !== 0) {
-          throw new Error("Age must be a whole number!");
+        if (value > new Date()) {
+          throw new Error("Date of Birth must be in the past!");
+        } else if (getAge(value) < 18) {
+          throw new Error("Mentor must be atleast 18 years old");
         }
       },
     },

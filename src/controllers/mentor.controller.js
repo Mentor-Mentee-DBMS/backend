@@ -9,7 +9,7 @@ const createMentorController = asyncHandler(async (req, res) => {
 
     res.status(201).send({ mentor, token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
 });
 
@@ -23,7 +23,7 @@ const loginMentorController = asyncHandler(async (req, res) => {
 
     res.send({ mentor, token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
 });
 
@@ -36,7 +36,7 @@ const logoutMentorController = asyncHandler(async (req, res) => {
 
     res.send({ message: "Logout successful", mentor: req.mentor });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
@@ -47,7 +47,7 @@ const logoutAllMentorsController = asyncHandler(async (req, res) => {
 
     res.send({ message: "Logout successful", mentor: req.mentor });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
@@ -56,7 +56,21 @@ const getMentorProfileController = asyncHandler(async (req, res) => {
 });
 
 const updateMentorController = asyncHandler(async (req, res) => {
-  const allowedUpdates = ["name", "email", "age", "password"];
+  const allowedUpdates = [
+    "name",
+    "email",
+    "phone",
+    "address",
+    "bio",
+    "dob",
+    "education_qualification",
+    "domains",
+    "industry",
+    "experience",
+    "linkedin",
+    "achievements",
+    "password",
+  ];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
@@ -72,7 +86,7 @@ const updateMentorController = asyncHandler(async (req, res) => {
       await req.mentor.save();
       res.send(req.mentor);
     } catch (error) {
-      res.status(400).send(error);
+      res.status(400).send({ error: error.message });
     }
   }
 });
@@ -83,7 +97,7 @@ const deleteMentorController = asyncHandler(async (req, res) => {
 
     res.send(req.mentor);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
