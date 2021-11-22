@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-// const Task = require("../models/task");
+const Mentee = require("../models/mentee");
 
 const mentorSchema = new mongoose.Schema(
   {
@@ -67,7 +67,7 @@ const mentorSchema = new mongoose.Schema(
       trim: true,
       validate(value) {
         if (!validator.isLength(value, { min: 10 })) {
-          throw new Error("Bio is too small!");
+          throw new Error("Bio is too short!");
         }
       },
     },
@@ -148,11 +148,11 @@ const mentorSchema = new mongoose.Schema(
   }
 );
 
-// userSchema.virtual("tasks", {
-//   ref: "Task",
-//   localField: "_id",
-//   foreignField: "author",
-// });
+mentorSchema.virtual("mentees", {
+  ref: "Mentee",
+  localField: "_id",
+  foreignField: "mentor",
+});
 
 mentorSchema.methods.toJSON = function () {
   const mentor = this;

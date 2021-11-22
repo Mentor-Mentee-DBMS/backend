@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Mentor = require("../models/mentor");
+const Mentee = require("../models/mentee");
 
 const authMentor = async (req, res, next) => {
   try {
@@ -9,7 +10,7 @@ const authMentor = async (req, res, next) => {
       _id: decoded._id,
       "tokens.token": token,
     });
-    if (!user) {
+    if (!mentor) {
       throw new Error();
     } else {
       req.token = token;
@@ -29,7 +30,7 @@ const authMentee = async (req, res, next) => {
       _id: decoded._id,
       "tokens.token": token,
     });
-    if (!user) {
+    if (!mentee) {
       throw new Error();
     } else {
       req.token = token;

@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Mentee = require("../models/mentee");
+const Mentor = require("../models/mentor");
 
 const createMenteeController = asyncHandler(async (req, res) => {
   const mentee = new Mentee(req.body);
@@ -88,7 +89,7 @@ const deleteMenteeController = asyncHandler(async (req, res) => {
 });
 
 const getAllMentorsController = asyncHandler(async (req, res) => {
-  const mentors = await Mentee.find();
+  const mentors = await Mentor.find();
   res.send(mentors);
 });
 
